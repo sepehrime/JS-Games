@@ -26,7 +26,8 @@ nav {
 /* Style list inside nav menu */
 nav ul {
   list-style-type: none;
-  padding: 0;
+  padding: 10px;
+  font-size: larger;
 }
 
 main {
@@ -44,7 +45,12 @@ footer {
   text-align: center;
   color: white;
 }
-
+#myCanvas {
+  width: 800px;
+  height: 600px;
+  border-style: solid;
+  border-color: #0a0101;
+}
 @media (max-width: 600px) {
   section {
     flex-direction: column;
