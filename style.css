@@ -1,70 +1,239 @@
+/* ---------- Colors & fonts ---------- */
+:root {
+  color-scheme: dark; /* dark built-in controls (number spinners, scrollbars) */
+  --ink: #09132f; /* page background */
+  --panel: #122152; /* game screen and menu items */
+  --line: #24397a; /* borders, dot grid */
+  --paper: #f2f5ff; /* main text */
+  --muted: #9fb0dd; /* secondary text */
+  --sun: #ffc93c; /* title, buttons */
+  --sun-dark: #c98f00; /* button "depth" shadow */
+  --coral: #ff5c7a; /* title shadow */
+  --mint: #3ee0b5; /* active menu item, focus rings */
+
+  --font-pixel: "Pixelify Sans", "Courier New", monospace;
+  --font-body: "Rubik", system-ui, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
+
+/* Full-height column: header, content (grows), footer.
+   This keeps the footer at the bottom even when a game is short. */
 body {
-  font-family: "Courier New", Courier, monospace;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  color: var(--paper);
+  background-color: var(--ink);
+  background-image: radial-gradient(var(--line) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
+/* ---------- Header ---------- */
 header {
-  background-color: beige;
-  padding: 20px;
+  padding: 32px 16px 24px;
   text-align: center;
+  border-bottom: 4px solid var(--line);
+  background-color: var(--ink);
 }
 header h1 {
-  font-size: 2.5rem;
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 7vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--sun);
+  text-shadow: 4px 4px 0 var(--coral);
+}
+header h1 span {
+  text-shadow: none;
+}
+header h2 {
+  margin: 12px 0 0;
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: var(--muted);
 }
 
+/* ---------- Layout: menu + game screen ---------- */
 section {
-  display: flex;
-}
-nav {
   flex: 1;
-  background-color: #ccc;
-  padding: 15px;
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  padding: 24px;
 }
 
-/* Style list inside nav menu */
+nav {
+  flex: 0 0 220px;
+}
 nav ul {
-  list-style-type: none;
-  padding: 10px;
-  font-size: larger;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+nav a {
+  display: block;
+  padding: 12px 14px;
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  color: var(--paper);
+  text-decoration: none;
+  background-color: var(--panel);
+  border: 2px solid var(--line);
+  border-radius: 6px;
+}
+nav a:hover {
+  color: var(--mint);
+  border-color: var(--mint);
+}
+nav a.active {
+  color: var(--ink);
+  background-color: var(--mint);
+  border-color: var(--mint);
+}
+nav a:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 2px;
 }
 
+/* The game "screen" every game draws into.
+   flex: 1 fills the width; the default align-self (stretch) fills the height. */
 main {
-  flex: 4;
-  background-color: aliceblue;
-  padding: 15px;
+  flex: 1;
+  min-width: 0;
+  padding: 32px 24px;
   text-align: center;
+  background-color: var(--panel);
+  border: 4px solid var(--line);
+  border-radius: 12px;
+}
+main h1,
+main h2 {
+  margin: 0 0 16px;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  color: var(--sun);
+}
+main h1 {
+  font-size: 2rem;
 }
 main h2 {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
+main h3 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: var(--muted);
+}
+main p {
+  max-width: 60ch;
+  margin: 20px auto 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* ---------- Shared game controls ---------- */
+main input {
+  width: 7rem;
+  margin: 8px 4px;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--paper);
+  background-color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 6px;
+}
+
+main button {
+  margin: 8px 4px;
+  padding: 10px 20px;
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  color: var(--ink);
+  background-color: var(--sun);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 0 var(--sun-dark);
+  cursor: pointer;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+/* Press-down effect, like an arcade button */
+main button:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--sun-dark);
+}
+main button:disabled,
+main input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+main input:focus-visible,
+main button:focus-visible {
+  outline: 3px solid var(--mint);
+  outline-offset: 2px;
+}
+
+/* For future canvas games */
+main canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background-color: var(--ink);
+  border: 4px solid var(--line);
+  border-radius: 8px;
+}
+
+/* ---------- Footer ---------- */
+/* sticky + bottom: 0 keeps it on screen even if the page scrolls */
 footer {
-  background-color: #888;
-  padding: 10px;
+  position: sticky;
+  bottom: 0;
+  padding: 12px 16px;
   text-align: center;
-  color: white;
+  font-family: var(--font-pixel);
+  color: var(--muted);
+  background-color: var(--ink);
+  border-top: 4px solid var(--line);
 }
-#myCanvas {
-  width: 800px;
-  height: 600px;
-  border-style: solid;
-  border-color: #0a0101;
-}
+
+/* ---------- Small screens ---------- */
 @media (max-width: 600px) {
   section {
     flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+  nav {
+    flex: none;
+  }
+  nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  main {
+    flex: 1; /* fill the space between the menu and the footer */
+    padding: 24px 16px;
   }
 }
 
-/* Nav links built by app.js */
-nav a {
-  color: inherit;
-  text-decoration: none;
-}
-nav a:hover {
-  text-decoration: underline;
-}
-nav a.active {
-  font-weight: bold;
+@media (prefers-reduced-motion: reduce) {
+  main button {
+    transition: none;
+  }
 }
