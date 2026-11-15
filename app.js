@@ -1,55 +1,62 @@
-const MAX_ATTEMPTS = 5;
-let secret;
-let attempts;
-// console.log(secret);
-const msg = document.getElementById("message");
-const guessBtn = document.getElementById("btn");
-const input = document.getElementById("guess");
-const reset = document.getElementById("playAgain");
-msg.textContent = `Press 'Play' button to start`;
-guessBtn.disabled = true;
-input.disabled = true;
+// To add a game: create games/<name>/game.js, import it here, and add it to `games`.
+import guessTheNumber from "./games/guess-the-number/game.js";
 
-function resetGame() {
-  secret = Math.floor(Math.random() * 100) + 1;
-  attempts = MAX_ATTEMPTS;
-  guessBtn.disabled = false;
-  msg.textContent = `I'm thinking of a number between [1,100]. You have ${attempts} chances to guess it!`;
-  reset.disabled = true;
-  input.disabled = false;
-  input.focus();
+const games = [guessTheNumber];
+
+const gameList = document.getElementById("game-list");
+const container = document.getElementById("game-container");
+const welcomeHTML = container.innerHTML; // the "Select a game" screen
+let currentGame = null;
+
+// Builds one nav link per game, e.g. <a href="#guess-the-number">.
+function buildNav() {
+  for (const game of games) {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `#${game.id}`;
+    a.textContent = game.title;
+    li.append(a);
+    gameList.append(li);
+  }
 }
-function endGame(message) {
-  msg.textContent = message;
-  guessBtn.disabled = true;
-  reset.disabled = false;
-  input.disabled = true;
-  reset.focus();
+
+// Marks the nav link for `id` as active (pass null to clear it).
+function highlightNav(id) {
+  for (const a of gameList.querySelectorAll("a")) {
+    a.classList.toggle("active", a.getAttribute("href") === `#${id}`);
+  }
 }
-reset.addEventListener("click", resetGame);
-guessBtn.addEventListener("click", () => {
-  const guess = Number(input.value);
-  if (!Number.isInteger(guess) || guess > 100 || guess < 1) {
-    msg.textContent = `Please enter an integer between 1 and 100`;
+
+// Runs on page load and every time the URL hash changes.
+function route() {
+  // Stop the game that's on screen before showing anything else.
+  if (currentGame) {
+    currentGame.unmount();
+    currentGame = null;
+  }
+
+  const id = location.hash.slice(1); // "#guess-the-number" -> "guess-the-number"
+  const game = games.find((g) => g.id === id);
+
+  if (game) {
+    container.innerHTML = "";
+    game.mount(container);
+    currentGame = game;
+    highlightNav(id);
     return;
   }
-  attempts--;
-  if (guess === secret) {
-    endGame(`🥳 You guessed it right in ${MAX_ATTEMPTS - attempts} tries!`);
-  } else if (attempts === 0) {
-    endGame(`Sorry, you ran out of chance! The number was ${secret}`);
-  } else {
-    const hint = guess > secret ? "too high" : "too low";
-    const word = attempts === 1 ? "chance" : "chances";
-    msg.textContent = `😩 Sorry, ${hint}! Try again. You have ${attempts} more ${word}!`;
-  }
-  input.value = "";
-  input.focus();
-});
 
-input.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    guessBtn.click();
+  // No hash: show the welcome screen.
+  // Unknown hash (e.g. a typo): say so above the welcome screen.
+  container.innerHTML = welcomeHTML;
+  if (id) {
+    const notFound = document.createElement("p");
+    notFound.textContent = `Game "${id}" not found. Pick one from the menu.`;
+    container.prepend(notFound);
   }
-});
+  highlightNav(null);
+}
+
+buildNav();
+window.addEventListener("hashchange", route);
+route();

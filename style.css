@@ -56,3 +56,15 @@ footer {
     flex-direction: column;
   }
 }
+
+/* Nav links built by app.js */
+nav a {
+  color: inherit;
+  text-decoration: none;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+nav a.active {
+  font-weight: bold;
+}
