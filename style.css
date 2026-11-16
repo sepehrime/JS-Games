@@ -198,6 +198,24 @@ main canvas {
   border: 4px solid var(--line);
   border-radius: 8px;
 }
+.message {
+  white-space: pre-line;
+  font-size: large;
+}
+
+/* NATO game: one word per line, first letter highlighted.
+   ::first-letter only works on block-level elements, hence display: block. */
+.nato-word {
+  display: block;
+}
+.nato-word::first-letter {
+  color: var(--sun);
+  font-weight: bold;
+}
+/* Comma after every word except the last */
+.nato-word:not(:last-child)::after {
+  content: ",";
+}
 
 /* ---------- Footer ---------- */
 /* sticky + bottom: 0 keeps it on screen even if the page scrolls */

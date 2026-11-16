@@ -1,7 +1,7 @@
 // To add a game: create games/<name>/game.js, import it here, and add it to `games`.
 import guessTheNumber from "./games/guess-the-number/game.js";
-import natoPhoenetic from "./games/NATO/game.js";
-const games = [guessTheNumber, natoPhoenetic];
+import natoPhonetic from "./games/NATO/game.js";
+const games = [guessTheNumber, natoPhonetic];
 
 const gameList = document.getElementById("game-list");
 const container = document.getElementById("game-container");

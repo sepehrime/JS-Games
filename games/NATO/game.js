@@ -1,60 +1,86 @@
+const NATO = {
+  a: "Alfa",
+  b: "Bravo",
+  c: "Charlie",
+  d: "Delta",
+  e: "Echo",
+  f: "Foxtrot",
+  g: "Golf",
+  h: "Hotel",
+  i: "India",
+  j: "Juliet",
+  k: "Kilo",
+  l: "Lima",
+  m: "Mike",
+  n: "November",
+  o: "Oscar",
+  p: "Papa",
+  q: "Quebec",
+  r: "Romeo",
+  s: "Sierra",
+  t: "Tango",
+  u: "Uniform",
+  v: "Victor",
+  w: "Whiskey",
+  x: "X-ray",
+  y: "Yankee",
+  z: "Zulu",
+  0: "Zero",
+  1: "One",
+  2: "Two",
+  3: "Three",
+  4: "Four",
+  5: "Five",
+  6: "Six",
+  7: "Seven",
+  8: "Eight",
+  9: "Niner",
+};
+
 export default {
-  id: "nato-phoenetic",
+  id: "nato-phonetic",
   title: "NATO Phoenetic",
 
   // Draws the game inside `container` and wires up its buttons.
   mount(container) {
     container.innerHTML = `
-      <h1>NATO Phoenetic:</h1>
-      <input class="word" type="string" />
-      <button class="btn">Convert</button>
+      <h1>NATO Phonetic:</h1>
+      <form class="nato-form">
+        <input class="word" type="text" />
+        <button class="btn">Convert</button>
+      </form>
       <p class="message"></p>
     `;
 
     // Look elements up inside the container, not the whole page,
     // so other games can reuse the same class names safely.
     const msg = container.querySelector(".message");
-    const btn = container.querySelector(".btn");
+    const form = container.querySelector(".nato-form");
     const input = container.querySelector(".word");
 
-    msg.textContent = `Enter your name and Press 'Convert' button`;
+    msg.textContent = `Enter your text and Press 'Convert' button`;
 
-    const nato = {
-      a: "Alfa",
-      b: "Bravo",
-      c: "Charlie",
-      d: "Delta",
-      e: "Echo",
-      f: "Foxtrot",
-      g: "Golf",
-      h: "Hotel",
-      i: "india",
-      j: "Juliet",
-    };
+    // A form submits on both a button click and Enter in the input,
+    // so one listener covers both.
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // stop the browser from reloading the page
 
-    function endGame(message) {
-      msg.textContent = message;
-      guessBtn.disabled = true;
-      reset.disabled = false;
-      input.disabled = true;
-      reset.focus();
-    }
-
-    btn.addEventListener("click", () => {
-      const word = String(input.value);
+      const word = input.value.trim().toLowerCase();
       const wordChars = word.split("");
-      const natoPhoenetics = wordChars.map((c) => nato[c]);
-      msg.textContent = natoPhoenetics;
+      const natoPhoenetics = wordChars.map((c) => NATO[c] ?? c);
+
+      // One element per word, so CSS can style each word's first letter.
+      // textContent (not innerHTML) keeps typed text from becoming HTML.
+      const wordEls = natoPhoenetics.map((phonetic) => {
+        const span = document.createElement("span");
+        span.className = "nato-word";
+        span.textContent = phonetic;
+        return span;
+      });
+      msg.replaceChildren(...wordEls);
 
       input.value = "";
       input.focus();
-    });
-
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        btn.click();
-      }
     });
   },
 
