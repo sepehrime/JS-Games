@@ -8,8 +8,10 @@ export default {
   mount(container) {
     container.innerHTML = `
       <h1>Guess the Number:</h1>
-      <input class="guess" type="number" />
-      <button class="btn">Guess</button>
+      <form class="nato-form">
+        <input class="guess" type="number" min="1" max="100" step="1" novalidate/>
+        <button class="btn">Guess</button>
+      </form>
       <button class="play-again">Play</button>
       <p class="message"></p>
     `;
@@ -20,6 +22,7 @@ export default {
     const guessBtn = container.querySelector(".btn");
     const input = container.querySelector(".guess");
     const reset = container.querySelector(".play-again");
+    const form = container.querySelector(".nato-form");
 
     let secret;
     let attempts;
@@ -48,7 +51,9 @@ export default {
 
     reset.addEventListener("click", resetGame);
 
-    guessBtn.addEventListener("click", () => {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // stops the browser from reloading the page
+
       const guess = Number(input.value);
       if (!Number.isInteger(guess) || guess > 100 || guess < 1) {
         msg.textContent = `Please enter an integer between 1 and 100`;
@@ -58,7 +63,7 @@ export default {
       if (guess === secret) {
         endGame(`🥳 You guessed it right in ${MAX_ATTEMPTS - attempts} tries!`);
       } else if (attempts === 0) {
-        endGame(`Sorry, you ran out of chance! The number was ${secret}`);
+        endGame(`Sorry, you ran out of chances! The number was ${secret}`);
       } else {
         const hint = guess > secret ? "too high" : "too low";
         const word = attempts === 1 ? "chance" : "chances";
@@ -66,13 +71,6 @@ export default {
       }
       input.value = "";
       input.focus();
-    });
-
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        guessBtn.click();
-      }
     });
   },
 
