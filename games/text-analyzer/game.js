@@ -50,11 +50,16 @@ export default {
       event.preventDefault(); // stop the browser from reloading the page
 
       const textLength = input.value.length;
+      const wordCount = input.value.match(/\b[\w']+\b/g).length;
 
       // One element per word, so CSS can style each word's first letter.
       // textContent (not innerHTML) keeps typed text from becoming HTML.
       const most_frequent = frequntWords(input.value);
-      msg.textContent = `Your text has ${textLength} characters.\nThe most frequent words are:\n ${most_frequent.slice(0, 4)}`;
+      const top5 = most_frequent
+        .slice(0, 5)
+        .map(([word, count], i) => `${i + 1}. ${word} (${count})`)
+        .join("\n");
+      msg.textContent = `Your text has ${wordCount} words and ${textLength} characters.\nThe 5 most frequent words are:\n${top5}`;
       // input.value = "";
 
       input.focus();
