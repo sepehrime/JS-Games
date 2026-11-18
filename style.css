@@ -255,3 +255,11 @@ footer {
     transition: none;
   }
 }
+textarea {
+  width: 100%;
+  max-width: 500px;
+  height: 120px;
+  padding: 10px;
+  font-family: inherit; /* Overrides default monospace font */
+  resize: vertical; /* Options: both, horizontal, vertical, none */
+}

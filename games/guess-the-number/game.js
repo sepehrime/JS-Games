@@ -8,8 +8,8 @@ export default {
   mount(container) {
     container.innerHTML = `
       <h1>Guess the Number:</h1>
-      <form class="nato-form">
-        <input class="guess" type="number" min="1" max="100" step="1" novalidate/>
+      <form class="nato-form" novalidate>
+        <input class="guess" type="number" min="1" max="100" step="1" />
         <button class="btn">Guess</button>
       </form>
       <button class="play-again">Play</button>
