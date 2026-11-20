@@ -3,7 +3,14 @@ import guessTheNumber from "./games/guess-the-number/game.js";
 import natoPhonetic from "./games/nato-phonetic/game.js";
 import textAnalyzer from "./games/text-analyzer/game.js";
 import powerBall from "./games/powerball/game.js";
-const games = [textAnalyzer, powerBall, guessTheNumber, natoPhonetic];
+import czarCypher from "./games/czar-cypher/game.js";
+const games = [
+  textAnalyzer,
+  powerBall,
+  czarCypher,
+  guessTheNumber,
+  natoPhonetic,
+];
 
 const gameList = document.getElementById("game-list");
 const container = document.getElementById("game-container");
