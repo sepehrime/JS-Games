@@ -4,11 +4,13 @@ import natoPhonetic from "./games/nato-phonetic/game.js";
 import textAnalyzer from "./games/text-analyzer/game.js";
 import powerBall from "./games/powerball/game.js";
 import czarCypher from "./games/czar-cypher/game.js";
+import diceRoll from "./games/dice-roll/game.js";
 const games = [
   textAnalyzer,
   powerBall,
   czarCypher,
   guessTheNumber,
+  diceRoll,
   natoPhonetic,
 ];
 
