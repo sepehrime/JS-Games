@@ -4,11 +4,14 @@ export default {
 
   // Draws the game inside `container` and wires up its buttons.
   mount(container) {
+    // The <link> lives inside the container, so it is removed (and its styles
+    // stop applying) when app.js clears the container to switch games.
+    const cssUrl = new URL("./style.css", import.meta.url);
     container.innerHTML = `
+      <link rel="stylesheet" href="${cssUrl}" />
       <h1>Roll the dice</h1>
-      
-    <div class="container">
-      <h1>Play Dice</h1>
+
+    <div class="container dice-roll">
 
       <div class="dice">
         <p>Player 1</p>
